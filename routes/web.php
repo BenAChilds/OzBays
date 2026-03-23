@@ -27,6 +27,22 @@ Route::get('/airports/{icao}', [AirportsController::class, 'airportLadder'])->na
 Route::get('/map', [MapController::class, 'index'])->name('mapIndex');
 Route::get('/map/{icao}', [MapController::class, 'airportMap']);
 
+// Administration Actions
+    Route::prefix('admin')->group(function () {
+
+        // Airport Information
+        Route::get('airport', [DashboardController::class, 'airportList'])->name('dashboard.admin.airport.all');
+        Route::get('airport/{icao}', [DashboardController::class, 'airportView'])->name('dashboard.admin.airport.view');
+        Route::get('airport/{icao}/{bay}', [DashboardController::class, 'bayView'])->name('dashboard.admin.bay.view');
+        Route::post('airport/disable', [DashboardController::class, 'disableAirport'])->name('dashboard.admin.airport.disable');
+        Route::post('airport/activate', [DashboardController::class, 'activateAirport'])->name('dashboard.admin.airport.activate');
+        // Route::post('airport/{icao}/update', [DashboardController::class, 'airportView'])->name('dashboard.admin.airport.update');
+        // Route::post('airport/{icao}/approve', [DashboardController::class, 'airportView'])->name('dashboard.admin.airport.approve.change');
+
+        // Aircraft Information
+        Route::get('aircraft', [DashboardController::class, 'aircraftList'])->name('dashboard.admin.aircraft.all');
+    });
+
 // Dashboard
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -37,21 +53,6 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/discord/link', [DiscordController::class, 'linkRedirectDiscord'])->name('dashboard.discord.link');
     Route::get('/discord/server/join', [DiscordController::class, 'joinRedirectDiscord'])->name('dashboard.discord.join');
     Route::get('/discord/server/join/callback', [DiscordController::class, 'joinCallbackDiscord']);
-
-    // Administration Actions
-    Route::prefix('admin')->group(function () {
-
-        // Airport Information
-        Route::get('airport', [DashboardController::class, 'airportList'])->name('dashboard.admin.airport.all');
-        Route::get('airport/{icao}', [DashboardController::class, 'airportView'])->name('dashboard.admin.airport.view');
-        Route::get('airport/{icao}/{bay}', [DashboardController::class, 'bayView'])->name('dashboard.admin.bay.view');
-        Route::post('airport/disable', [DashboardController::class, 'disableAirport'])->name('dashboard.admin.airport.disable');
-        // Route::post('airport/{icao}/update', [DashboardController::class, 'airportView'])->name('dashboard.admin.airport.update');
-        // Route::post('airport/{icao}/approve', [DashboardController::class, 'airportView'])->name('dashboard.admin.airport.approve.change');
-
-        // Aircraft Information
-        Route::get('aircraft', [DashboardController::class, 'aircraftList'])->name('dashboard.admin.aircraft.all');
-    });
 });
 
 // Updates

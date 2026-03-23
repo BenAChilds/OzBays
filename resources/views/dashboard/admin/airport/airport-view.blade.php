@@ -16,15 +16,6 @@
                 <a href="{{route('dashboard.admin.airport.all')}}" style="color: black;"> <i class="fas fa-arrow-left"></i> See All Airports</a>
             </div>
         </div>
-        <div class="col-md-5">
-            {{-- Create quick disable button incase something goes wrong in production --}}
-            @if($airport->status == 'active' && Auth::user()->hasRole('Maintainer'))
-                <a data-target="#disableAirportModal" data-toggle="modal" style="cursor: pointer">
-                    <img style="height: 125px; width: auto;" src="https://png.pngtree.com/png-clipart/20231114/original/pngtree-panic-button-shutdown-picture-image_13260836.png">
-                </a>
-                <b>< Disables Airport</b>
-            @endif
-        </div>
     </div>
 
 
@@ -115,6 +106,16 @@
 
         {{-- Map Section --}}
         <div class="col-md-4">
+            {{-- Create quick disable button incase something goes wrong in production --}}
+            @if($airport->status == 'active' && Auth::user()->hasRole('Maintainer'))
+                <a data-target="#disableAirportModal" data-toggle="modal" style="cursor: pointer" class="btn btn-danger">Disable Airport</a><br>
+            @endif
+
+            {{-- Create quick disable button incase something goes wrong in production --}}
+            @if($airport->status == 'testing' && Auth::user()->hasRole('Maintainer'))
+                <a data-target="#activateAirportModal" data-toggle="modal" style="cursor: pointer" class="btn btn-success">Activate Airport</a><br>
+            @endif
+
             <iframe
                 src="{{ route('mapIndex', ['lat' => $airport->lat, 'lon' => $airport->lon, 'zoom' => '12.5', 'hide_info' => true]) }}"
                 style="width:100%; height:500px; border:none;"
@@ -143,7 +144,35 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                        <input type="submit" class="btn btn-primary" value="Add">
+                        <input type="submit" class="btn btn-danger" value="Deactivate {{$airport->icao}}">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    {{-- Activate Airport Modal --}}
+    <div class="modal fade" id="activateAirportModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <form action="{{route('dashboard.admin.airport.activate')}}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <p>This will mark the airport as 'Active', which will <b>enable</b> interaction with <u>OzStrips</u> and <u>Hoppie</u> Servers for <b>ALL PILOTS</b>.<br><br>This should only be used after whatever placed the Airport in Testing has been fixed.</p>
+
+                        <input required type="hidden" value={{$airport->icao}} name="icao" maxlength="9" id="" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-success" value="Activate {{$airport->icao}}">
                     </div>
                 </form>
 

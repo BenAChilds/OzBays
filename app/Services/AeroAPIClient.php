@@ -11,11 +11,11 @@ class AeroAPIClient
     {
         $icao = strtoupper($icao);
 
-        return Cache::remember("aeroapi:schedule2s:{$icao}", now()->addMinutes(50), function () use ($icao) {
+        return Cache::remember("aeroapi:schedules:{$icao}", now()->addMinutes(50), function () use ($icao) {
 
             if($type = "Major1"){ $key = "API_MAIN_KEY"; }
-            elseif($type = "Major2"){ $key = "API_MAINBACKUP_KEY"; }
-            elseif($type = "Minor"){ $key = "API_BACKUP_KEY"; }
+            elseif($type = "Major2"){ $key = "API_BACKUP_KEY"; }
+            elseif($type = "Minor"){ $key = "API_MAINBACKUP_KEY"; }
             else{$key = "API_RESERVE_KEY";}
 
             $client = new Client([
@@ -33,8 +33,6 @@ class AeroAPIClient
             }
 
             return null;
-
-            sleep(61);
         });
     }
 }

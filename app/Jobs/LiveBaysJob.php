@@ -42,8 +42,6 @@ class LiveBaysJob implements ShouldQueue
         // Load the Airlabs Client
         $aeroapi = new AeroAPIClient();
 
-        // Delete all flight data over one week in age. Look at the last_updated collum...
-
         // Find all airports that data needs to be updated in this check.
         $nowHour = Carbon::now()->hour;
         $airports = Airports::where('live_bays', 1)
@@ -64,7 +62,7 @@ class LiveBaysJob implements ShouldQueue
 
                 // If there is no gate assignment, or the entry does not exist, then skip adding the data (as it cant be used)
                 if($schedule['gate_destination']){
-                    if($schedule['gate_destination'] == null) {
+                    if($schedule['gate_destination'] == null || $schedule['destination']['code_icao'] == null && $schedule['terminal_destination']) {
                         continue;
                     }
                 } else {
@@ -104,6 +102,8 @@ class LiveBaysJob implements ShouldQueue
                     ];
                 }
             }
+
+            sleep(61);
         }
 
 
@@ -125,6 +125,13 @@ class LiveBaysJob implements ShouldQueue
                     'scheduled_bay' => $bay->id ?? null,
                 ]);
             }
+        }
+
+
+        ####### Delete all flight entries over 72 hours old.
+        $old_slots = FlightLiveBays::where('updated_at', '<', Carbon::now()->subDays(3))->get();
+        foreach($old_slots as $os){
+            $os->delete();
         }
 
         dd($flight_data);

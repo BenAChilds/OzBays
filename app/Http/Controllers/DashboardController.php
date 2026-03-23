@@ -52,7 +52,18 @@ class DashboardController extends Controller
         $airport->status = 'testing';
         $airport->save();
 
-        return back()->with('info', 'Airport has successfully been disabled!');
+        return back()->with('success', 'Airport has successfully been disabled!');
+    }
+
+    // Activate Airport Function
+    public function activateAirport(Request $request)
+    {
+        $airport = Airports::where('icao', $request->icao)->first();
+
+        $airport->status = 'active';
+        $airport->save();
+
+        return back()->with('success', 'Airport has successfully been activated! - YeeHaw!!!!');
     }
 
     // Aircraft.json view

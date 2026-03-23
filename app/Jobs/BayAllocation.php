@@ -15,6 +15,7 @@ use App\Models\BayAllocations;
 use App\Models\BayConflicts;
 use App\Models\Flights;
 use App\Models\Airline;
+use App\Models\FlightLiveBays;
 
 class BayAllocation implements ShouldQueue
 {
@@ -44,6 +45,7 @@ class BayAllocation implements ShouldQueue
             $jsonPath = public_path('config/aircraft.json');
             $rawJson  = json_decode(File::get($jsonPath), true);
 
+            // Freight Information
             $this->freightOnlyTypes = [];
             if (is_array($rawJson) && isset($rawJson['FreightOnly']) && is_array($rawJson['FreightOnly'])) {
                 $this->freightOnlyTypes = array_values(array_unique(array_map('strtoupper', $rawJson['FreightOnly'])));
@@ -72,10 +74,6 @@ class BayAllocation implements ShouldQueue
 
                 $priorityIndex++;
             }
-
-            // dd($aircraftJSON);
-
-            // dd($aircraftJSON);
             
             // Initialise all Variables
             $allFlights = Flights::with('assignedBay')->get(); //Used to check for any slots that were assigned, and then the aircraft diverted.
@@ -85,9 +83,9 @@ class BayAllocation implements ShouldQueue
             
 
             if(env('APP_DEBUG') == true){
-                $discordChannel = config('services.discord.OzBays_Local');
+                $discordChannel = config('services.discord.'.env('APP_ENV').'.bay_assign');
             } else {
-                $discordChannel = config('services.discord.OzBays');
+                $discordChannel = config('services.discord.'.env('APP_ENV').'.bay_assign');
             }
 
             $initialAssignment = false;
@@ -171,7 +169,8 @@ class BayAllocation implements ShouldQueue
             }
 
             ## Bays that were blocked, but are now free from any aircraft --- Clear Bay & Delete AC Slot
-            $clearBays = Bays::where('status', 2)->where('clear', 1)->get();
+            $clearBays = Bays::where('status', 2)->where('clear', 1)->with('FlightInfo')->get();
+
             foreach($clearBays as $bay){
 
                 // Remove all slots for Departure - They have now left the gate
@@ -383,6 +382,7 @@ class BayAllocation implements ShouldQueue
                 // If assigning fails, skip and continue loop
                 if ($bay === null) {
                     Log::channel('bays')->error("Failed to assign bay for {$cs['cs']}({$cs['ac']}) at {$cs['arr']} — skipping");
+
                     continue;
                 }
 
@@ -417,7 +417,6 @@ class BayAllocation implements ShouldQueue
         // Needs to prioritise all Company Specific Bays over Non-Specific.
         // E.g. Priority 5 JST Bay trumps Priority 1 NULL Bay.
 
-
         // Need to also ensure that the system doesn't give a stupid bay before 
         $callsign = is_array($cs) ? ($cs['cs'] ?? null) : $cs;
         $info = $callsign !== null ? Flights::where('callsign', $callsign)->first() : null;
@@ -427,14 +426,11 @@ class BayAllocation implements ShouldQueue
         }
 
         $operator = substr($info->callsign, 0, 3); // Cuts off the Callsign
-        // dd($operator);
-
         $acType = strtoupper((string) $info->ac);
         $isFreight = in_array($acType, $this->freightOnlyTypes, true) || Airline::isFreightCallsign($info->callsign);
 
         // Index the AC so it can 
         $aircraftIndex = null;
-
         foreach ($aircraftJSON as $index => $types) {
             if (in_array($info->ac, $types, true)) {
                 $aircraftIndex = $index;
@@ -443,8 +439,6 @@ class BayAllocation implements ShouldQueue
         }
 
         $allowedGroups = array_slice($aircraftJSON, $aircraftIndex);
-
-
         $allowedTypes = array_values(array_unique(array_merge(...$allowedGroups)));
 
         if (!in_array($info->ac, $allowedTypes, true)) {
@@ -454,12 +448,19 @@ class BayAllocation implements ShouldQueue
             $ac = $info->ac;
         }
 
-        // dd($priorityOrder);
-
         ### - Preferred Bay Assignment Check can go Here - Pull data from online sources?
-            // - TBC in future building
         {
+            // Grab Live Bay Assignment
+            // $live_bay = FlightLiveBays::where('callsign', $cs)->with('bayInfo')->first();
 
+            // if($live_bay !== null){
+            //     // Check if the IRL Bay Assignment is available - If so, select it
+            //     if($live_bay->bayInfo->status == null){
+            //         $live_bay_details = $live_bay->bayInfo;
+
+            //         return $live_bay_details;
+            //     }
+            // }
         }
 
         ##### - AIRCRAFT CASE EXPRESSION
@@ -471,9 +472,6 @@ class BayAllocation implements ShouldQueue
         }
 
         $aircraftPrioritySql = "GREATEST(" . implode(", ", $aircraftPriorityParts) . ")";
-
-        // dd($aircraftPrioritySql);
-
 
         $availableBaysQuery = Bays::where('airport', $info->arr)
             ->whereNull('callsign')
@@ -554,14 +552,12 @@ class BayAllocation implements ShouldQueue
                 ->orderByRaw("RAND()")
             ->get();
         }
-        // dd($availableBays)
 
         ####### - Oh No, The Harder Rule returned no options!!!!!!!  We need to find something, so lets do a relaxed version.......
         if($availableBays !== null){
 
         }
 
-        // 
         $candidates = $availableBays->take(7);
         $selectedBay = $candidates->random();
         if (!app()->runningUnitTests()) {
@@ -579,6 +575,7 @@ class BayAllocation implements ShouldQueue
     {
 
         $info = collect($cs);
+
         // dd($cs);
 
         // dd($info['eibt']);
@@ -669,6 +666,9 @@ class BayAllocation implements ShouldQueue
             return $value;
         } catch (\Throwable $e) {
             Log::channel('bays')->error("assignBay() failed for {$info['cs']}: {$e->getMessage()}");
+            $discord = new DiscordClient();
+            $discord->sendMessage(config('services.discord.'.env('APP_ENV').'.bay_errors'), "Bay Assignment Failed | assignBay() failed for {$info['cs']}: {$e->getMessage()} \n <@200426385863344129>");
+
             return null; // <-- This prevents the outer loop from crashing
         }
     }
@@ -685,7 +685,7 @@ class BayAllocation implements ShouldQueue
             1750979, // Kyle
             1363418, // Corey
             1686135, // Alex B
-            1687954, // Alex D
+            1697954, // Alex D
             1569950, // Nikola
             1773586, // Cruize
             1638887, // Max
@@ -779,7 +779,7 @@ class BayAllocation implements ShouldQueue
 
     private function calculateDistance($lat1, $lon1, $lat2, $lon2) 
     {
-        $earthRadiusNm = 3440.065; // Radius of Earth in nautical miles
+        $earthRadiusNm = 3443.920; // Radius of Earth in nautical miles
     
         // Convert degrees to radians
         $lat1Rad = deg2rad($lat1);

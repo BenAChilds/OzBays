@@ -205,10 +205,10 @@ use Carbon\Carbon;
           <ul class="navbar-nav ">
             @can('view data')
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle {{ str_contains(request()->url(), 'admin') == true ? 'active' : '' }} " href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-cog">
                 </i>
-                Manage Data
+                Administration
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{{route('dashboard.admin.airport.all')}}">Airports</a>
@@ -239,7 +239,7 @@ use Carbon\Carbon;
             @else
             <!-- My Account & Notifications -->
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle {{ str_contains(request()->url(), 'dashboard') == true ? 'active' : '' }} " href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user">
                 </i>
                 {{Auth::user()->fullName('FLC')}}
