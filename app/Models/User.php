@@ -59,21 +59,9 @@ class User extends Authenticatable
     public function fullName($format)
     {
         if ($format == 'FLC') {
-            if($this->display_last_name == 0) {
-                return $this->fname.' - '.$this->id;
-            } elseif ($this->display_last_name == 1) {
-                return $this->fname.' '.$this->lname.' - '.$this->id;
-            } elseif($this->display_last_name == 2){
-                return $this->fname.' '.substr($this->lname, 0, 1).' - '.$this->id;
-            }
+            return $this->fname.' '.substr($this->lname, 0, 1).' - '.$this->id;
         } elseif ($format === 'FL') {
-            if($this->display_last_name == 0) {
-                return $this->fname;
-            } elseif ($this->display_last_name == 1) {
-                return $this->fname.' '.$this->lname;
-            } elseif($this->display_last_name == 2){
-                return $this->fname.' '.substr($this->lname, 0, 1);
-            }
+            return $this->fname.' '.substr($this->lname, 0, 1);
         } elseif ($format === 'F') {
             return $this->fname;
         }
@@ -86,7 +74,7 @@ class User extends Authenticatable
         //If the user doesnt have a role, then give them one temporarily.
         if (count($this->roles) == 0) {
             //Assign them guest
-            $this->assignRole('Member');
+            $this->assignRole('Pilot');
         }
 
         return $this->roles[0];
