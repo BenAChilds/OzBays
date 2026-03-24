@@ -86,7 +86,7 @@ class User extends Authenticatable
         //If the user doesnt have a role, then give them one temporarily.
         if (count($this->roles) == 0) {
             //Assign them guest
-            $this->assignRole('Member');
+            $this->assignRole('Pilot');
         }
 
         return $this->roles[0];
