@@ -21,7 +21,7 @@ class APIController extends Controller
     {
         $airports = Airports::where('status', 'active')->pluck('icao');
 
-        $flights = Flights::select(['callsign', 'arr', 'distance', 'scheduled_bay'])
+        $flights = Flights::select(['callsign', 'dep', 'arr', 'distance', 'scheduled_bay'])
             ->where('online', 1)
             ->whereIn('arr', $airports)
             ->where('distance', '<', 150)

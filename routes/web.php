@@ -14,6 +14,10 @@ use App\Http\Controllers\TestController;
 // New Homepage
 Route::get('/', [PagesController::class, 'Home'])->name('home');
 
+// Error Messages
+Route::get('/404', function () {abort(404);});
+Route::get('/500', function () {abort(500);});
+
 // Privacy Policy - Required for VATSIM SSO
 Route::prefix('policy')->group(function () {
     Route::get('privacy', [PagesController::class, 'PrivacyPolicy'])->name('privacy.policy');
