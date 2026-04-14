@@ -40,6 +40,33 @@ class APIController extends Controller
 
         return $flights;
     }
+
+    public function OzStripsCDM()
+    {
+        return response()->json(
+            Airports::where('status', 'active')
+                ->with(['occupiedBays' => function ($query) {
+                    $query->where('status', 1)
+                        ->select('airport', 'bay', 'callsign');
+                }])
+                ->get()
+                ->keyBy('icao')
+                ->map(function ($airport) {
+                    return [
+                        'occupied_bays' => $airport->occupiedBays
+                            ->groupBy('callsign')
+                            ->map(function ($bays) {
+                                $bay = $bays->first();
+                                return [
+                                    'callsign' => $bay->callsign,
+                                    'bay' => $bay->bay,
+                                ];
+                            })
+                            ->values(),
+                    ];
+                })
+        );
+    }
     
     // Current Flights Recorded by the OzBays Server
     public function liveFlights()

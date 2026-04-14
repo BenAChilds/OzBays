@@ -42,7 +42,7 @@
 
                     <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]" style="text-align: center;">
                         Yeah, look... Something on the server did not work as expected, kinda like the above.... <br> 
-                        Rest assured however, the error has been sent via the Developer for investigation and resolution, so its not all in vain!
+                        Rest assured however, the error has been sent to the Developer for investigation and resolution, so its not all in vain!
                     </p>
 
                     <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]" style="text-align: center;">
