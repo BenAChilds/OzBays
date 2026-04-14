@@ -14,6 +14,7 @@ use App\Services\DiscordClient;
 use Carbon\Carbon;
 use App\Models\Airports;
 use App\Models\Flights;
+use App\Models\FlightLogs;
 use App\Models\BayAllocations;
 use App\Models\BayConflicts;
 
@@ -262,8 +263,10 @@ class FlightData implements ShouldQueue
         // Alrighty. Need to record that the aircraft arrived at the Airport of choice
         $arrivals = Flights::where('status', 'Arrived')->where('flight_recorded', 0)->where('online', 1)->get();
         foreach($arrivals as $arr){
-            $stats = FlightLogs::create(['callsign' => $arr->callsign], [
-                'airline'   => preg_replace('/^[A-Za-z]+/', '', $arr->callsign),
+            // dd($arr);
+            FlightLogs::create([
+                'callsign' => $arr->callsign,
+                'airline' => preg_replace('/^([A-Za-z]{2,4}).*/', '$1', $arr->callsign),
                 'arrival'   => $arr->arr,
                 'type'      => $arr->type,
                 'aircraft'  => $arr->ac,
