@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Airline;
 use App\Models\Airports;
 use App\Models\Bays;
 use App\Models\Flights;
@@ -27,9 +28,20 @@ class PartialsController extends Controller
                 ->from('bays')
                 ->where('status', 2)
                 ->groupBy('callsign');
-            })->orderBy('callsign', 'asc')->get();
+            })->with('FlightInfo')->orderBy('callsign', 'asc')->get();
 
-        return view('partials.arrival-ladder', compact('icao', 'taxing', 'arrival', 'occupied_bays'))->render();
+        // Resolve airline names from the 3-letter ICAO operator prefix of each callsign,
+        // in one query rather than one per row.
+        $callsigns = $taxing->pluck('callsign')
+            ->merge($arrival->pluck('callsign'))
+            ->merge($occupied_bays->pluck('callsign'))
+            ->filter();
+
+        $operators = $callsigns->map(fn ($cs) => strtoupper(substr($cs, 0, 3)))->unique()->values();
+
+        $airlines = Airline::whereIn('icao', $operators)->pluck('name', 'icao');
+
+        return view('partials.arrival-ladder', compact('icao', 'taxing', 'arrival', 'occupied_bays', 'airlines'))->render();
     }
 
     // Render FlightInfo on Dashboard
