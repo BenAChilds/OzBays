@@ -35,144 +35,26 @@ use Carbon\Carbon;
         });
         </script>
 
-        <!-- Style for NAVBAR -->
-        <style>@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
-          .navbar-icon-top .navbar-nav .nav-link > .fa {
-            position: relative;
-            width: 36px;
-            font-size: 24px;
-            
-          }
-          
-          .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
-            font-size: 0.75rem;
-            position: absolute;
-            right: 0;
-            font-family: sans-serif;
-          }
-          
-          .navbar-icon-top .navbar-nav .nav-link > .fa {
-            top: 3px;
-            line-height: 12px;
-          }
-          
-          .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
-            top: -10px;
-          }
-          
-          @media (min-width: 576px) {
-            .navbar-icon-top.navbar-expand-sm .navbar-nav .nav-link {
-              text-align: center;
-              display: table-cell;
-              height: 70px;
-              vertical-align: middle;
-              padding-top: 0;
-              padding-bottom: 0;
-            }
-          
-            .navbar-icon-top.navbar-expand-sm .navbar-nav .nav-link > .fa {
-              display: block;
-              width: 48px;
-              margin: 2px auto 4px auto;
-              top: 0;
-              line-height: 24px;
-            }
-          
-            .navbar-icon-top.navbar-expand-sm .navbar-nav .nav-link > .fa > .badge {
-              top: -7px;
-            }
-          }
-          
-          @media (min-width: 768px) {
-            .navbar-icon-top.navbar-expand-md .navbar-nav .nav-link {
-              text-align: center;
-              display: table-cell;
-              height: 70px;
-              vertical-align: middle;
-              padding-top: 0;
-              padding-bottom: 0;
-            }
-          
-            .navbar-icon-top.navbar-expand-md .navbar-nav .nav-link > .fa {
-              display: block;
-              width: 48px;
-              margin: 2px auto 4px auto;
-              top: 0;
-              line-height: 24px;
-            }
-          
-            .navbar-icon-top.navbar-expand-md .navbar-nav .nav-link > .fa > .badge {
-              top: -7px;
-            }
-          }
-          
-          @media (min-width: 992px) {
-            .navbar-icon-top.navbar-expand-lg .navbar-nav .nav-link {
-              text-align: center;
-              display: table-cell;
-              height: 70px;
-              vertical-align: middle;
-              padding-top: 0;
-              padding-bottom: 0;
-            }
-          
-            .navbar-icon-top.navbar-expand-lg .navbar-nav .nav-link > .fa {
-              display: block;
-              width: 48px;
-              margin: 2px auto 4px auto;
-              top: 0;
-              line-height: 24px;
-            }
-          
-            .navbar-icon-top.navbar-expand-lg .navbar-nav .nav-link > .fa > .badge {
-              top: -7px;
-            }
-          }
-          
-          @media (min-width: 1200px) {
-            .navbar-icon-top.navbar-expand-xl .navbar-nav .nav-link {
-              text-align: center;
-              display: table-cell;
-              height: 70px;
-              vertical-align: middle;
-              padding-top: 0;
-              padding-bottom: 0;
-            }
-          
-            .navbar-icon-top.navbar-expand-xl .navbar-nav .nav-link > .fa {
-              display: block;
-              width: 48px;
-              margin: 2px auto 4px auto;
-              top: 0;
-              line-height: 24px;
-            }
-          
-            .navbar-icon-top.navbar-expand-xl .navbar-nav .nav-link > .fa > .badge {
-              top: -7px;
-            }
-          }
-          </style>
-        
         <!-- Fonts -->
-        <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 
-        <style>
-          .card{
-              border-radius: 12px;
-          }
-        </style>
+        <!-- OzBays site styling -->
+        <link rel="stylesheet" href="{{ asset('css/site.css') }}">
+
     </head>
 
     <div name="navigation-bar">
-      <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar oz-navbar navbar-expand-lg navbar-dark">
         <a style="margin-right: 20px;" class="navbar-brand" href="{{route('home')}}">
-            <img style="height: 60px;" src="{{ asset('img/logo - Text.png') }}"></img>
+            <img src="{{ asset('img/logo - Text.png') }}" alt="OzBays">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-      
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Nav Left -->
           <ul class="navbar-nav mr-auto">
@@ -262,12 +144,12 @@ use Carbon\Carbon;
     <body>
       <div id="content-wrapper">
         <div class="container" style="padding-top: 50px;">
-            @include('layouts.messages')  
+            @include('layouts.messages')
             @yield('content')
             @include('layouts.footer')
         </div>
       </div>
-        
+
     </body>
 
     <script>

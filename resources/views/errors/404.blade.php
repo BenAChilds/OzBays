@@ -37,7 +37,7 @@
 
                 <div class="text-[13px] leading-[20px] flex-1 p-6 pb-12 lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">
                     <h1 style="font-size: 30px; margin-bottom: 20px;" class="mb-2 font-medium">
-                        OzBays - ERR 500
+                        OzBays - ERR 404
                     </h1>
 
                     <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">

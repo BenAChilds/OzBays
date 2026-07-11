@@ -4,7 +4,7 @@
 <h2>Your OzBays Settings, {{Auth::user()->fullName('F')}}</h2>
 <p>See all the settings which you can control throughout OzBays. Make sure to press the save button with any changes you would like!</p>
 <div class="pb-3">
-    <a href="{{route('dashboard.index')}}" style="color: black;"> <i class="fas fa-arrow-left"></i> Return to your Dashboard</a>
+    <a href="{{route('dashboard.index')}}"> <i class="fas fa-arrow-left"></i> Return to your Dashboard</a>
 </div>
 
 <hr>

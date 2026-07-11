@@ -48,7 +48,7 @@
                 {{-- User Card --}}
                     <li style="margin-bottom: 5px; border-width: 1px; border-radius: 5px;" class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
-                            <a disabled class="card-link" style="color: black; cursor:default">
+                            <a disabled class="card-link" style="cursor:default">
                                 <h6 class="card-title mb-1"><i class="fa fa-user"></i> {{Auth::user()->fullName('FLC')}}</h6>
                                 <small class="text-muted"><b>Role: </b>{{Auth::user()->highestRole()->name}}</small><br>
                                 {{-- <small class="text-muted"><b>Discord: </b> @if(Auth::user()->discord_user_id == null)Not Linked @else Linked @endif</small> --}}
@@ -60,7 +60,7 @@
                     @if(Auth::user()->discord_user_id == null)
                     <li style="margin-bottom: 5px; border-width: 1px; border-radius: 5px;" class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
-                            <a href="{{route('dashboard.discord.link')}}" class="card-link" style="color: black;">
+                            <a href="{{route('dashboard.discord.link')}}" class="card-link">
                                 <h6 class="card-title mb-1"><i class="fa fa-sign-in"></i> Link Your Discord Account</h6>
                                 <small class="text-muted">Link your discord with your profile!</small>
                             </a>
@@ -70,7 +70,7 @@
                     @elseif(Auth::user()->discord_user_id !== null && Auth::user()->discord_member == false)
                     <li style="margin-bottom: 5px; border-width: 1px; border-radius: 5px;" class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
-                            <a href="{{route('dashboard.discord.join')}}" class="card-link" style="color: black;">
+                            <a href="{{route('dashboard.discord.join')}}" class="card-link">
                                 <h6 class="card-title mb-1"><i class="fa fa-sign-in"></i> Join our Discord</h6>
                                 <small class="text-muted">Join the OzBays discord!</small>
                             </a>
@@ -103,7 +103,7 @@
                 {{-- OzBays Settings --}}
                     <li style="margin-bottom: 5px; border-width: 1px; border-radius: 5px;" class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
-                            <a href="{{route('dashboard.settings.index')}}" class="card-link" style="color: black;">
+                            <a href="{{route('dashboard.settings.index')}}" class="card-link">
                                 <h6 class="card-title mb-1"><i class="fa fa-cog"></i> OzBays Settings</h6>
                                 <small class="text-muted">Edit your personal OzBays Preferences</small>
                             </a>

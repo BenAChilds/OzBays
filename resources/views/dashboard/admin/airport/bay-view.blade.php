@@ -5,7 +5,7 @@
 <h3>Bay Information</h3>
 <p>Hover over right-hand options to see what the option does, and how to modify it.</p>
 <div class="pb-3">
-    <a href="{{route('dashboard.admin.airport.view', [$bay->airport])}}" style="color: black;"> <i class="fas fa-arrow-left"></i> Airport Info</a>
+    <a href="{{route('dashboard.admin.airport.view', [$bay->airport])}}"> <i class="fas fa-arrow-left"></i> Airport Info</a>
 </div>
 
 @include('partials.message', [

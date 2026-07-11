@@ -13,7 +13,7 @@
             <p>Airport & Bay Information for {{$airport->name}} Airport</p>
 
             <div class="pb-3">
-                <a href="{{route('dashboard.admin.airport.all')}}" style="color: black;"> <i class="fas fa-arrow-left"></i> See All Airports</a>
+                <a href="{{route('dashboard.admin.airport.all')}}"> <i class="fas fa-arrow-left"></i> See All Airports</a>
             </div>
         </div>
     </div>

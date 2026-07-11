@@ -1,0 +1,459 @@
+/* OzBays — Control Tower theme
+   Dark theme applied sitewide: base Bootstrap components (cards, tables,
+   forms, pagination, DataTables) are reskinned here so existing markup
+   across the app doesn't need per-page changes. */
+
+:root {
+    --oz-bg: #0a0e18;
+    --oz-bg-alt: #0d1322;
+    --oz-surface: #131b2e;
+    --oz-surface-soft: rgba(255, 255, 255, 0.04);
+    --oz-border: rgba(255, 255, 255, 0.08);
+    --oz-border-strong: rgba(255, 255, 255, 0.14);
+    --oz-text: #e8ecf6;
+    --oz-text-muted: #97a2b8;
+    --oz-amber: #ffc72c;
+    --oz-amber-strong: #ffb300;
+    --oz-amber-soft: #ffe08a;
+    --oz-navy-text: #16210a;
+    --oz-radius: 18px;
+}
+
+body {
+    font-family: 'Inter', 'Nunito', ui-sans-serif, system-ui, sans-serif;
+    background: var(--oz-bg);
+    color: var(--oz-text);
+    min-height: 100vh;
+}
+
+a {
+    color: var(--oz-amber-soft);
+}
+
+a:hover {
+    color: var(--oz-amber);
+}
+
+hr {
+    border-color: var(--oz-border-strong);
+}
+
+.text-muted {
+    color: var(--oz-text-muted) !important;
+}
+
+/* Ambient radar-grid backdrop, sitewide */
+#content-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+#content-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 12% 0%, rgba(255, 199, 44, 0.14), transparent 45%),
+        radial-gradient(circle at 100% 15%, rgba(59, 130, 246, 0.10), transparent 40%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 96px),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 96px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+#content-wrapper > .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* ---------- Cards ---------- */
+.card {
+    background: var(--oz-surface-soft);
+    border: 1px solid var(--oz-border);
+    border-radius: var(--oz-radius);
+    color: var(--oz-text);
+}
+
+.card-link,
+.card a {
+    color: var(--oz-text);
+}
+
+.card .text-muted {
+    color: var(--oz-text-muted) !important;
+}
+
+.list-group-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--oz-border);
+    color: var(--oz-text);
+}
+
+/* ---------- Tables & DataTables ---------- */
+.table {
+    color: var(--oz-text);
+}
+
+.table th,
+.table td {
+    border-color: var(--oz-border);
+}
+
+.table thead th {
+    border-color: var(--oz-border-strong);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--oz-text);
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing {
+    color: var(--oz-text);
+}
+
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    background: var(--oz-surface);
+    color: var(--oz-text);
+    border: 1px solid var(--oz-border-strong);
+    border-radius: 8px;
+}
+
+/* This DataTables build (bs4) renders pagination as Bootstrap .pagination/.page-link,
+   not the classic .paginate_button markup — style the real elements. */
+.pagination .page-link {
+    background-color: var(--oz-surface);
+    border-color: var(--oz-border-strong);
+    color: var(--oz-text);
+}
+
+.pagination .page-link:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--oz-border-strong);
+    color: var(--oz-text);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--oz-amber);
+    border-color: var(--oz-amber);
+    color: var(--oz-navy-text);
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: var(--oz-surface);
+    border-color: var(--oz-border);
+    color: var(--oz-text-muted);
+}
+
+/* Bootstrap's "light" buttons default to a white surface — darken for this theme */
+.btn-light {
+    background-color: var(--oz-surface);
+    border-color: var(--oz-border-strong);
+    color: var(--oz-text);
+}
+
+.btn-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--oz-border-strong);
+    color: var(--oz-text);
+}
+
+/* ---------- Forms & modals ---------- */
+.form-control,
+select.form-control,
+.input-group-text {
+    background-color: var(--oz-surface);
+    color: var(--oz-text);
+    border: 1px solid var(--oz-border-strong);
+}
+
+.form-control:focus {
+    background-color: var(--oz-surface);
+    color: var(--oz-text);
+    border-color: var(--oz-amber);
+    box-shadow: 0 0 0 0.2rem rgba(255, 199, 44, 0.25);
+}
+
+.form-control::placeholder {
+    color: var(--oz-text-muted);
+}
+
+select.form-control option {
+    background-color: var(--oz-surface);
+    color: var(--oz-text);
+}
+
+.modal-content {
+    background-color: var(--oz-surface);
+    color: var(--oz-text);
+    border: 1px solid var(--oz-border-strong);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--oz-border);
+}
+
+.modal-header .close {
+    color: var(--oz-text);
+    text-shadow: none;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand, .oz-display {
+    font-family: 'Sora', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+a { transition: color .15s ease; }
+
+/* ---------- Navbar ---------- */
+nav.oz-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background: rgba(10, 14, 24, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--oz-border);
+    padding: 0.5rem 1.5rem;
+}
+
+nav.oz-navbar .navbar-brand img {
+    height: 46px;
+    filter: drop-shadow(0 2px 10px rgba(255, 199, 44, 0.25));
+}
+
+nav.oz-navbar .navbar-nav .nav-link {
+    color: var(--oz-text-muted) !important;
+    font-weight: 600;
+    font-size: 0.92rem;
+    letter-spacing: 0.01em;
+    padding: 0.55rem 1rem !important;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0.15rem;
+}
+
+nav.oz-navbar .navbar-nav .nav-link i {
+    font-size: 0.95rem;
+    width: auto;
+}
+
+nav.oz-navbar .navbar-nav .nav-link:hover {
+    color: var(--oz-text) !important;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+nav.oz-navbar .navbar-nav .nav-link.active {
+    color: var(--oz-navy-text) !important;
+    background: linear-gradient(135deg, var(--oz-amber-soft), var(--oz-amber));
+}
+
+nav.oz-navbar .navbar-toggler {
+    border-color: var(--oz-border-strong);
+}
+
+nav.oz-navbar .dropdown-menu {
+    background: var(--oz-surface);
+    border: 1px solid var(--oz-border-strong);
+    border-radius: 14px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    padding: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+nav.oz-navbar .dropdown-item {
+    color: var(--oz-text);
+    border-radius: 10px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+}
+
+nav.oz-navbar .dropdown-item:hover,
+nav.oz-navbar .dropdown-item:focus {
+    background: rgba(255, 199, 44, 0.12);
+    color: var(--oz-amber-soft);
+}
+
+nav.oz-navbar .dropdown-item.disabled {
+    color: var(--oz-text-muted);
+}
+
+nav.oz-navbar .dropdown-divider {
+    border-color: var(--oz-border-strong);
+}
+
+@media (max-width: 991px) {
+    nav.oz-navbar .navbar-collapse {
+        margin-top: 0.75rem;
+    }
+    nav.oz-navbar .navbar-nav .nav-link {
+        margin: 0.15rem 0;
+    }
+}
+
+/* ---------- Buttons ---------- */
+.oz-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    text-decoration: none !important;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
+}
+
+.oz-btn:hover { transform: translateY(-1px); }
+
+.oz-btn-primary {
+    background: linear-gradient(135deg, var(--oz-amber-soft), var(--oz-amber-strong));
+    color: var(--oz-navy-text) !important;
+    box-shadow: 0 10px 30px rgba(255, 179, 0, 0.25);
+}
+
+.oz-btn-primary:hover {
+    box-shadow: 0 14px 36px rgba(255, 179, 0, 0.35);
+}
+
+.oz-btn-ghost {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--oz-border-strong);
+    color: var(--oz-text) !important;
+}
+
+.oz-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.09);
+}
+
+/* ---------- Footer ---------- */
+footer.oz-footer {
+    background: var(--oz-bg-alt);
+    border: 1px solid var(--oz-border);
+    border-radius: var(--oz-radius);
+    padding: 1rem 1.5rem;
+}
+
+footer.oz-footer .copyright,
+footer.oz-footer .copyright * {
+    color: var(--oz-text-muted) !important;
+}
+
+footer.oz-footer .nav-link {
+    color: var(--oz-text-muted) !important;
+}
+
+footer.oz-footer .nav-link:hover {
+    color: var(--oz-amber) !important;
+}
+
+/* ---------- Homepage hero ---------- */
+.oz-hero {
+    padding: 3rem 0 1.5rem;
+}
+
+.oz-hero .oz-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--oz-amber-soft);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: rgba(255, 199, 44, 0.1);
+    border: 1px solid rgba(255, 199, 44, 0.25);
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    margin-bottom: 1.1rem;
+}
+
+.oz-hero .oz-eyebrow .oz-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--oz-amber);
+    box-shadow: 0 0 0 4px rgba(255, 199, 44, 0.18);
+}
+
+.oz-hero h1 {
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 0.9rem;
+}
+
+.oz-hero h1 .oz-amber-text {
+    background: linear-gradient(135deg, var(--oz-amber-soft), var(--oz-amber));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.oz-hero p.lead {
+    color: var(--oz-text-muted);
+    font-size: 1.05rem;
+    max-width: 640px;
+    margin-bottom: 1.6rem;
+}
+
+.oz-hero .oz-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Dark glass card */
+.oz-card-dark {
+    background: var(--oz-surface-soft);
+    border: 1px solid var(--oz-border);
+    border-radius: var(--oz-radius);
+    padding: 1.5rem;
+    backdrop-filter: blur(6px);
+}
+
+.oz-card-dark h2, .oz-card-dark h3, .oz-card-dark h4 {
+    color: var(--oz-text);
+}
+
+.oz-card-dark p {
+    color: var(--oz-text-muted);
+}
+
+.oz-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--oz-text);
+    margin-bottom: 1rem;
+}
+
+.oz-section-title i {
+    color: var(--oz-amber);
+}
+
+.oz-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--oz-amber-soft);
+    background: rgba(255, 199, 44, 0.1);
+    border: 1px solid rgba(255, 199, 44, 0.25);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+}
