@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div style="width: 100vw; margin: -50px calc(-50vw + 50%) -1.5rem;">
+<div style="width: 100vw; margin: -50px calc(-50vw + 50%) 0;">
     <iframe
         src="{{ route('mapEmbed') }}"
         title="OzBays Live Network Map"

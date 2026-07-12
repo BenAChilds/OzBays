@@ -26,7 +26,10 @@
 
         <div class="form-group">
             <label>Current Background Photo</label><br>
-            <img src="{{$article->image_url}}" alt="{{$article->subject}}" style="max-width: 320px; max-height: 180px; object-fit: cover; border-radius: 8px;">
+            <img src="{{$article->image_url}}" alt="{{$article->subject}}" style="max-width: 320px; max-height: 180px; object-fit: {{$article->has_custom_image ? 'cover' : 'contain'}}; border-radius: 8px; {{$article->has_custom_image ? '' : 'background: var(--oz-bg-alt); padding: 1.5rem;'}}">
+            @unless($article->has_custom_image)
+                <small class="form-text text-muted">No custom photo uploaded &mdash; showing the generic OzBays logo background.</small>
+            @endunless
         </div>
 
         <div class="form-group">

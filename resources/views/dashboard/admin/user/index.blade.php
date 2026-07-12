@@ -20,8 +20,8 @@
                         <td>{{$user->id}}</td>
                         <td>{{$user->fullName('FL')}}</td>
                         <td>Not Recorded (Yet)</td>
-                        <td>{{\Carbon\Carbon::parse($user->last_seen)->format('d/m/Y @ h:i').'Z' ?? null}}</td>
-                        <td>N/A</td>
+                        <td>{{$user->last_seen ? $user->last_seen->format('d/m/Y @ h:i A').'Z' : 'Never'}}</td>
+                        <td><a href="{{route('dashboard.admin.users.view', $user)}}">View</a></td>
                     </tr>
                 @endforeach
             </tbody>

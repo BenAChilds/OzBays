@@ -44,7 +44,7 @@
         </div>
 
         @if($news->count() > 0)
-            <a href="{{route('news.show', $news[0])}}" class="oz-news-featured" style="background-image: linear-gradient(180deg, rgba(10,14,24,0.15), rgba(10,14,24,0.95)), url('{{$news[0]->image_url}}');">
+            <a href="{{route('news.show', $news[0])}}" class="oz-news-featured {{$news[0]->has_custom_image ? '' : 'oz-news-no-image'}}" style="background-image: linear-gradient(180deg, rgba(10,14,24,0.15), rgba(10,14,24,0.95)), url('{{$news[0]->image_url}}');">
                 <span class="oz-news-featured-title">{{$news[0]->subject}}</span>
                 <p class="oz-news-excerpt">{{$news[0]->excerpt}}</p>
                 <span class="oz-news-meta">By {{$news[0]->author}} &middot; {{$news[0]->created_at->diffForHumans()}}</span>

@@ -57,4 +57,13 @@ class PartialsController extends Controller
 
         return view('partials.airport-stats', compact('stats_ground','stats_inbound'))->render();
     }
+
+    // Render Notification Bell for logged in users
+    public function updateNotifications(Request $request)
+    {
+        $notifications = $request->user()->notifications()->limit(8)->get();
+        $unread_count = $request->user()->unreadNotifications()->count();
+
+        return view('partials.notifications', compact('notifications', 'unread_count'))->render();
+    }
 }

@@ -24,8 +24,9 @@
         </div>
 
         <div class="form-group">
-            <label for="image">Background Photo</label>
-            <input type="file" name="image" id="image" class="form-control-file @error('image') is-invalid @enderror" accept="image/png, image/jpeg, image/webp" required>
+            <label for="image">Background Photo (optional)</label>
+            <input type="file" name="image" id="image" class="form-control-file @error('image') is-invalid @enderror" accept="image/png, image/jpeg, image/webp">
+            <small class="form-text text-muted">Leave blank to use the generic OzBays logo background.</small>
             @error('image') <div class="invalid-feedback d-block">{{$message}}</div> @enderror
         </div>
 

@@ -50,6 +50,20 @@
         </div>
     </div>
 
+    {{-- News Article Notifications --}}
+    <div class="d-flex flex-row justify-content-between mt-2">
+        <div>
+            <h4 class="font-weight-bold blue-text">News Article Notifications</h4>
+            <p>Receive a notification in your bell menu whenever a new OzBays news article is published?</p>
+        </div>
+        <div style="width: 30%;">
+            <select name="news_notifications" class="form-control">
+                <option value="1" @if(Auth::user()->userPreferences->news_notifications == 1) selected @endif>Yes - Notify me about new news articles</option>
+                <option value="0" @if(Auth::user()->userPreferences->news_notifications == 0) selected @endif>No - Do not notify me about new news articles</option>
+            </select>
+        </div>
+    </div>
+
     <hr>
 
     {{-- Email Sections --}}

@@ -1,21 +1,12 @@
-<footer class="footer oz-footer mt-4">
-    <div class="container-fluid">
-        <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-2">
-                <div class="copyright text-left text-sm text-lg-start">
-                    OzBays V0.9.1 <br>© Joshua Micallef | 2025 -
-                    <script>
-                        document.write(new Date().getFullYear())
-                    </script>.
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                    <li class="nav-item">
-                        <a href="{{route('privacy.policy')}}" class="nav-link pe-0" target="_blank">Privacy Policy</a>
-                    </li>
-                </ul>
-            </div>
+<footer class="footer oz-footer">
+    <div class="container oz-footer-inner text-center">
+        <div class="copyright">
+            OzBays v0.9.1 &copy; Joshua Micallef | 2025&ndash;{{ now()->year }}
+        </div>
+        <div class="oz-footer-links-row">
+            <a href="{{ route('privacy.policy') }}" class="oz-footer-link">Privacy Policy</a>
+            <a href="{{ route('news.index') }}" class="oz-footer-link">Recent News</a>
+            <a href="{{ route('changelog.index') }}" class="oz-footer-link">Changelog</a>
         </div>
     </div>
 </footer>

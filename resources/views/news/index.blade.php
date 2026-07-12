@@ -6,7 +6,7 @@
     @if($articles->count() > 0)
         <div class="oz-news-grid mt-3">
             @foreach($articles as $article)
-                <a href="{{route('news.show', $article)}}" class="oz-news-featured" style="background-image: linear-gradient(180deg, rgba(10,14,24,0.15), rgba(10,14,24,0.95)), url('{{$article->image_url}}');">
+                <a href="{{route('news.show', $article)}}" class="oz-news-featured {{$article->has_custom_image ? '' : 'oz-news-no-image'}}" style="background-image: linear-gradient(180deg, rgba(10,14,24,0.15), rgba(10,14,24,0.95)), url('{{$article->image_url}}');">
                     <span class="oz-news-featured-title">{{$article->subject}}</span>
                     <p class="oz-news-excerpt">{{$article->excerpt}}</p>
                     <span class="oz-news-meta">By {{$article->author}} &middot; {{$article->created_at->diffForHumans()}}</span>

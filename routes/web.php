@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AirportsController;
+use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiscordController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PartialsController;
 use App\Http\Controllers\TestController;
@@ -24,12 +26,16 @@ Route::prefix('policy')->group(function () {
     Route::get('privacy', [PagesController::class, 'PrivacyPolicy'])->name('privacy.policy');
 });
 
+// Changelog
+Route::get('/changelog', [ChangelogController::class, 'index'])->name('changelog.index');
+
 // Airport Arrival Ladders
 Route::get('/airports', [AirportsController::class, 'index'])->name('airportIndex');
 Route::get('/airports/{icao}', [AirportsController::class, 'airportLadder'])->name('airportLadder');
 
 // Maps
 Route::get('/map', [MapController::class, 'index'])->name('mapIndex');
+Route::get('/map/embed', [MapController::class, 'embed'])->name('mapEmbed');
 Route::get('/map/{icao}', [MapController::class, 'airportMap']);
 
 // News Articles
@@ -51,7 +57,16 @@ Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
         // Route::post('airport/{icao}/approve', [DashboardController::class, 'airportView'])->name('dashboard.admin.airport.approve.change');
 
         // User Information
-        Route::get('users', [DashboardController::class, 'userList'])->name('dashboard.admin.users.list');
+        Route::middleware(['auth', 'can:view users'])->group(function () {
+            Route::get('users', [DashboardController::class, 'userList'])->name('dashboard.admin.users.list');
+        });
+        Route::middleware(['auth', 'can:view user data'])->group(function () {
+            Route::get('users/{user}', [DashboardController::class, 'userView'])->name('dashboard.admin.users.view');
+        });
+        Route::middleware(['auth', 'can:edit user data'])->group(function () {
+            Route::post('users/{user}/roles', [DashboardController::class, 'userAssignRole'])->name('dashboard.admin.users.roles.assign');
+            Route::delete('users/{user}/roles/{role}', [DashboardController::class, 'userRemoveRole'])->name('dashboard.admin.users.roles.remove');
+        });
 
         // Aircraft Information
         Route::get('aircraft', [DashboardController::class, 'aircraftList'])->name('dashboard.admin.aircraft.all');
@@ -67,6 +82,14 @@ Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
         Route::delete('/{news}', [NewsController::class, 'destroy'])->name('dashboard.admin.news.destroy');
     });
 
+    // Notification Administration
+    Route::prefix('admin/notifications')->middleware(['auth', 'can:send notifications'])->group(function () {
+        Route::get('/', [NotificationController::class, 'adminIndex'])->name('dashboard.admin.notifications.index');
+        Route::get('/create', [NotificationController::class, 'create'])->name('dashboard.admin.notifications.create');
+        Route::post('/', [NotificationController::class, 'store'])->name('dashboard.admin.notifications.store');
+        Route::get('/recipients', [NotificationController::class, 'recipients'])->name('dashboard.admin.notifications.recipients');
+    });
+
 // Dashboard
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -79,6 +102,15 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/discord/link', [DiscordController::class, 'linkRedirectDiscord'])->name('dashboard.discord.link');
     Route::get('/discord/server/join', [DiscordController::class, 'joinRedirectDiscord'])->name('dashboard.discord.join');
     Route::get('/discord/server/join/callback', [DiscordController::class, 'joinCallbackDiscord']);
+});
+
+// Notifications
+Route::prefix('notifications')->middleware('auth')->group(function () {
+    Route::get('/', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
+    Route::post('/{id}/mark-read', [NotificationController::class, 'markRead'])->name('notifications.markRead');
+    Route::get('/{id}/read', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::get('/{id}', [NotificationController::class, 'show'])->name('notifications.show');
 });
 
 // Updates
@@ -101,5 +133,6 @@ Route::prefix('partial')->group(function () {
     Route::get('/airport/ladder/{icao}', [PartialsController::class, 'updateLadder']);
     Route::get('/dashboard/flight-info', [PartialsController::class, 'updateFlights']);
     Route::get('/home/airport-stats', [PartialsController::class, 'updateAirportStats']);
-    
+    Route::get('/notifications', [PartialsController::class, 'updateNotifications'])->middleware('auth');
+
 });

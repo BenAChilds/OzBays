@@ -38,12 +38,17 @@ class NewsArticle extends Model
         return $this->user->fullName('F') . ', ' . $this->user->highestRole()->name;
     }
 
-    public function getImageUrlAttribute(): ?string
+    public function getImageUrlAttribute(): string
     {
         if (!$this->image) {
-            return null;
+            return asset('img/logo.png');
         }
 
         return asset('storage/' . $this->image);
+    }
+
+    public function getHasCustomImageAttribute(): bool
+    {
+        return !empty($this->image);
     }
 }

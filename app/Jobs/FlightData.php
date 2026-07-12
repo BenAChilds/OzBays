@@ -264,17 +264,25 @@ class FlightData implements ShouldQueue
         $arrivals = Flights::where('status', 'Arrived')->where('flight_recorded', 0)->where('online', 1)->get();
         foreach($arrivals as $arr){
             // dd($arr);
-            FlightLogs::create([
-                'callsign' => $arr->callsign,
-                'airline' => preg_replace('/^([A-Za-z]{2,4}).*/', '$1', $arr->callsign),
-                'arrival'   => $arr->arr,
-                'type'      => $arr->type,
-                'aircraft'  => $arr->ac,
-                'user_id'   => $arr->cid,
-            ]);
+            try {
+                FlightLogs::create([
+                    'callsign' => $arr->callsign,
+                    'airline' => preg_replace('/^([A-Za-z]{2,4}).*/', '$1', $arr->callsign),
+                    'arrival'   => $arr->arr,
+                    'type'      => $arr->type,
+                    'aircraft'  => $arr->ac,
+                    'user_id'   => $arr->cid,
+                ]);
 
-            $arr->flight_recorded = 1;
-            $arr->save();
+                $arr->flight_recorded = 1;
+                $arr->save();
+            } catch (Exception $e) {
+                // One bad row (e.g. a missing arr/type/ac on a NOT NULL column) shouldn't
+                // stop the rest of the arrivals from being logged, or skip the offline
+                // cleanup and stats update below. flight_recorded stays 0, so it's
+                // retried on the next scheduled tick.
+                Log::error("FlightData: failed to record flight log for {$arr->callsign}: {$e->getMessage()}");
+            }
         }
 
         // Delete entries once offline for 15 minutes

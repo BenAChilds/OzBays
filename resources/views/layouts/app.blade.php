@@ -9,6 +9,7 @@ use Carbon\Carbon;
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{config('app.name', 'OzBays')}}</title>
 
         <!-- Bootstrap Content -->
@@ -67,6 +68,14 @@ use Carbon\Carbon;
                 </a>
             </li>
 
+            <!-- News Button -->
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'news') == true ? 'active' : '' }} " href="{{route('news.index')}}">
+                    <i class="fa fa-newspaper"></i>News
+                    <span class="sr-only"></span>
+                </a>
+            </li>
+
             <!-- Airports Button -->
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'airports') == true ? 'active' : '' }} " href="{{route('airportIndex')}}">
@@ -75,18 +84,10 @@ use Carbon\Carbon;
                 </a>
             </li>
 
-            <!-- Airports Button -->
+            <!-- Map Button -->
             <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'map') == true ? 'active' : '' }} " target="_blank" href="{{route('mapIndex')}}">
-                    <i class="fa fa-map"></i>Map
-                    <span class="sr-only"></span>
-                </a>
-            </li>
-
-            <!-- News Button -->
-            <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'news') == true ? 'active' : '' }} " href="{{route('news.index')}}">
-                    <i class="fa fa-newspaper"></i>News
+                <a class="nav-link {{ str_contains(request()->url(), 'map') == true ? 'active' : '' }} " href="{{route('mapIndex')}}">
+                    <i class="fa fa-map"></i>Live Map
                     <span class="sr-only"></span>
                 </a>
             </li>
@@ -111,6 +112,7 @@ use Carbon\Carbon;
                 @can('manage news')
                   <div class="dropdown-divider"></div> {{-- Divider --}}
                   <a class="dropdown-item" href="{{route('dashboard.admin.news.index')}}">Manage News</a>
+                  <a class="dropdown-item" href="{{route('dashboard.admin.notifications.index')}}">Manage Notifications</a>
                 @endcan
 
                 @can('view users')
@@ -132,7 +134,14 @@ use Carbon\Carbon;
             </li>
 
             @else
-            <!-- My Account & Notifications -->
+            <!-- Notifications -->
+            <li class="nav-item dropdown" id="notification-bell">
+              <a class="nav-link" href="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-bell"></i>
+              </a>
+            </li>
+
+            <!-- My Account -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle {{ str_contains(request()->url(), 'dashboard') == true ? 'active' : '' }} " href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user">
@@ -159,8 +168,8 @@ use Carbon\Carbon;
         <div class="container" style="padding-top: 50px;">
             @include('layouts.messages')
             @yield('content')
-            @include('layouts.footer')
         </div>
+        @include('layouts.footer')
       </div>
 
     </body>
@@ -170,5 +179,50 @@ use Carbon\Carbon;
             $('#dataTable').DataTable();
         } );
     </script>
+
+    @auth
+    <script>
+        function loadNotifications() {
+            fetch('/partial/notifications')
+                .then(res => res.text())
+                .then(html => {
+                    const container = document.getElementById('notification-bell');
+
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+
+                    container.replaceChildren(...temp.children);
+                });
+        }
+
+        // Initial load
+        loadNotifications();
+
+        // Refresh every 30s
+        setInterval(loadNotifications, 30000);
+
+        // Mark-as-read button — delegated so it survives the periodic
+        // replaceChildren() refresh above.
+        document.addEventListener('click', function (e) {
+            const button = e.target.closest('.oz-notification-mark-read');
+            if (!button) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const item = button.closest('.oz-notification-item');
+            const id = item?.dataset.notificationId;
+            if (!id) return;
+
+            fetch(`/notifications/${id}/mark-read`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                },
+            }).then(() => loadNotifications());
+        });
+    </script>
+    @endauth
 
 </html>

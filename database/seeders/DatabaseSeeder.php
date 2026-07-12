@@ -44,6 +44,9 @@ class DatabaseSeeder extends Seeder
         // News
         Permission::create(['name' => 'manage news']);
 
+        // Notifications
+        Permission::create(['name' => 'send notifications']);
+
 
         $developer->syncPermissions([
             'edit settings',
@@ -57,7 +60,8 @@ class DatabaseSeeder extends Seeder
             'update status',
             'view data',
 
-            'manage news'
+            'manage news',
+            'send notifications'
         ]);
 
         $maintainer->syncPermissions([
@@ -65,7 +69,8 @@ class DatabaseSeeder extends Seeder
             'update status',
             'view data',
 
-            'manage news'
+            'manage news',
+            'send notifications'
         ]);
         $contributor->syncPermissions([
             'view data'
