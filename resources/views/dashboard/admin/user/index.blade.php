@@ -9,7 +9,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">User</th>
-                    <th scope="col">Rating</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Last Seen</th>
                     <th scope="col">Actions</th>
                 </tr>
