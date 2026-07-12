@@ -3,13 +3,13 @@
 @section('content')
 
 <div class="oz-hero">
-    <span class="oz-eyebrow"><span class="oz-dot"></span>Alpha Development &middot; VATSIM Network Bay Assignment System (OzBays)</span>
-
     @if(Auth::guest())
         <h1>Welcome to <span class="oz-amber-text">OzBays</span> &mdash; coming in 2026</h1>
     @else
         <h1>Welcome back, {{Auth::user()->fullName('F')}} <br> <span class="oz-amber-text">OzBays</span> is coming in 2026</h1>
     @endif
+
+    <span class="oz-eyebrow"><span class="oz-dot"></span>Alpha Release</span>
 
     <p class="lead">Automatic bay assignment for VATSIM Australia Pacific (VATPAC) controlled airports. This system is still in active development and is currently <strong>not deployed</strong> on the VATSIM network.</p>
 
@@ -38,23 +38,32 @@
     </div>
 
     <div class="col-md-4">
-        <div class="oz-card-dark">
-            @if(Auth::guest())
-                <div class="oz-section-title"><i class="fa fa-discord"></i> OzBays Discord</div>
-                <p>OzBays has a dedicated Discord Server for VATSIM community members. This server is a place for announcements, discussion, as well as feedback to be provided from the community directly to those developing &amp; maintaining the program.</p>
-                <p class="mb-0">Sign in with VATSIM SSO in order to link your Discord account, to access the OzBays Discord server.</p>
-            @elseif(Auth::user()->discord_member == false)
-                <div class="oz-section-title"><i class="fa fa-discord"></i> OzBays Discord</div>
-                <p>OzBays has a dedicated Discord Server for VATSIM community members. This server is a place for announcements, discussion, as well as feedback to be provided from the community directly to those developing &amp; maintaining the program.</p>
-                <p class="mb-0"><strong>Access your Dashboard and link your Discord account to access the server.</strong></p>
-            @elseif(Auth::user()->discord_user_id !== null && Auth::user()->discord_member == true)
-                <div class="oz-section-title"><i class="fa fa-discord"></i> OzBays Discord</div>
-                <p class="mb-0">You are already a member of the OzBays server, use this to report any issues you come across, or recommend any potential new features to the OzBays team!</p>
-            @endif
+        <div class="oz-section-title d-flex justify-content-between align-items-center">
+            <span><i class="fa fa-newspaper"></i> Latest News</span>
+            <a href="{{route('news.index')}}" style="font-size: 0.85rem;">View All</a>
         </div>
+
+        @if($news->count() > 0)
+            <a href="{{route('news.show', $news[0])}}" class="oz-news-featured" style="background-image: linear-gradient(180deg, rgba(10,14,24,0.15), rgba(10,14,24,0.95)), url('{{$news[0]->image_url}}');">
+                <span class="oz-news-featured-title">{{$news[0]->subject}}</span>
+                <p class="oz-news-excerpt">{{$news[0]->excerpt}}</p>
+                <span class="oz-news-meta">By {{$news[0]->author}} &middot; {{$news[0]->created_at->diffForHumans()}}</span>
+            </a>
+
+            @foreach($news->slice(1, 2) as $article)
+                <div class="oz-card-dark oz-news-link-card mt-3">
+                    <a href="{{route('news.show', $article)}}" class="oz-news-link-title">{{$article->subject}}</a>
+                    <p class="oz-news-excerpt">{{$article->excerpt}}</p>
+                    <p class="oz-news-meta mb-0">By {{$article->author}}</p>
+                </div>
+            @endforeach
+        @else
+            <div class="oz-card-dark">
+                <p class="mb-0">No news articles have been published yet &mdash; check back soon!</p>
+            </div>
+        @endif
     </div>
 </div>
-
 <script>
     function loadLadder() {
         fetch('/partial/home/airport-stats')

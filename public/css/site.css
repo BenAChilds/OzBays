@@ -401,7 +401,6 @@ footer.oz-footer .nav-link:hover {
 .oz-hero p.lead {
     color: var(--oz-text-muted);
     font-size: 1.05rem;
-    max-width: 640px;
     margin-bottom: 1.6rem;
 }
 
@@ -441,6 +440,96 @@ footer.oz-footer .nav-link:hover {
 
 .oz-section-title i {
     color: var(--oz-amber);
+}
+
+/* ---------- News ---------- */
+.oz-news-featured {
+    position: relative;
+    min-height: 260px;
+    border-radius: var(--oz-radius);
+    border: 1px solid var(--oz-border);
+    background-size: cover;
+    background-position: center;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    text-decoration: none !important;
+    transition: transform .15s ease;
+}
+
+.oz-news-featured:hover {
+    transform: translateY(-2px);
+}
+
+.oz-news-featured-title {
+    color: var(--oz-text);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.oz-news-meta {
+    color: var(--oz-text-muted);
+    font-size: 0.82rem;
+}
+
+.oz-news-link-card {
+    padding: 1.1rem 1.25rem;
+}
+
+.oz-news-link-title {
+    display: block;
+    font-weight: 700;
+    color: var(--oz-text);
+    margin-bottom: 0.4rem;
+}
+
+.oz-news-link-title:hover {
+    color: var(--oz-amber-soft);
+}
+
+.oz-news-excerpt {
+    color: var(--oz-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.oz-news-banner {
+    min-height: 320px;
+    border-radius: var(--oz-radius);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--oz-border);
+}
+
+.oz-news-banner-inner {
+    padding: 2rem;
+}
+
+.oz-news-banner-inner h1 {
+    color: var(--oz-text);
+    font-weight: 700;
+}
+
+.oz-news-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.oz-news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.oz-news-grid .oz-news-featured {
+    min-height: 220px;
 }
 
 .oz-status-pill {

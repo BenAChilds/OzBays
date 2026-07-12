@@ -82,6 +82,14 @@ use Carbon\Carbon;
                     <span class="sr-only"></span>
                 </a>
             </li>
+
+            <!-- News Button -->
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'news') == true ? 'active' : '' }} " href="{{route('news.index')}}">
+                    <i class="fa fa-newspaper"></i>News
+                    <span class="sr-only"></span>
+                </a>
+            </li>
           </ul>
 
           <ul class="navbar-nav ">
@@ -98,6 +106,11 @@ use Carbon\Carbon;
                 @can('approve changes')
                   <div class="dropdown-divider"></div> {{-- Divider --}}
                   <a class="dropdown-item disabled" href="#">Changes Requiring Approval</a>
+                @endcan
+
+                @can('manage news')
+                  <div class="dropdown-divider"></div> {{-- Divider --}}
+                  <a class="dropdown-item" href="{{route('dashboard.admin.news.index')}}">Manage News</a>
                 @endcan
 
                 @can('view users')

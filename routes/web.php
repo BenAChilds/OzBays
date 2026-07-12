@@ -6,6 +6,7 @@ use App\Http\Controllers\AirportsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiscordController;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PartialsController;
 use App\Http\Controllers\TestController;
@@ -31,6 +32,10 @@ Route::get('/airports/{icao}', [AirportsController::class, 'airportLadder'])->na
 Route::get('/map', [MapController::class, 'index'])->name('mapIndex');
 Route::get('/map/{icao}', [MapController::class, 'airportMap']);
 
+// News Articles
+Route::get('/news', [NewsController::class, 'list'])->name('news.index');
+Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
+
 // Administration Actions
     Route::prefix('admin')->group(function () {
 
@@ -50,6 +55,16 @@ Route::get('/map/{icao}', [MapController::class, 'airportMap']);
 
         // Aircraft Information
         Route::get('aircraft', [DashboardController::class, 'aircraftList'])->name('dashboard.admin.aircraft.all');
+    });
+
+    // News Administration
+    Route::prefix('admin/news')->middleware(['auth', 'can:manage news'])->group(function () {
+        Route::get('/', [NewsController::class, 'index'])->name('dashboard.admin.news.index');
+        Route::get('/create', [NewsController::class, 'create'])->name('dashboard.admin.news.create');
+        Route::post('/', [NewsController::class, 'store'])->name('dashboard.admin.news.store');
+        Route::get('/{news}/edit', [NewsController::class, 'edit'])->name('dashboard.admin.news.edit');
+        Route::put('/{news}', [NewsController::class, 'update'])->name('dashboard.admin.news.update');
+        Route::delete('/{news}', [NewsController::class, 'destroy'])->name('dashboard.admin.news.destroy');
     });
 
 // Dashboard
